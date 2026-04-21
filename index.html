@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEOSAI APEX | AI-Powered Platform</title>
+    <meta name="description" content="NEOSAI APEX - Next-generation AI platform with integrated services">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔮</text></svg>">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <span class="brand-icon">🔮</span>
+                <span class="brand-text">NEOSAI<span class="accent">APEX</span></span>
+            </div>
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#ai-studio" class="nav-link">AI Studio</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-ghost" id="theme-toggle">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <button class="btn btn-primary" id="get-started-btn">Get Started</button>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span>
+                    <span>Powered by Advanced AI</span>
+                </div>
+                <h1 class="hero-title">
+                    Transform Your Vision with
+                    <span class="gradient-text">NEOSAI APEX</span>
+                </h1>
+                <p class="hero-description">
+                    Harness the power of cutting-edge AI to generate images, process text,
+                    automate workflows, and scale your business. All in one unified platform.
+                </p>
+                <div class="hero-actions">
+                    <button class="btn btn-primary btn-lg" id="start-free-btn">
+                        Start Free Trial
+                        <span class="btn-arrow">→</span>
+                    </button>
+                    <button class="btn btn-outline btn-lg" id="watch-demo-btn">
+                        <span class="play-icon">▶</span>
+                        Watch Demo
+                    </button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">5</span>
+                        <span class="stat-label">APIs Integrated</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">∞</span>
+                        <span class="stat-label">Possibilities</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label">AI Available</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="visual-orb orb-1"></div>
+                <div class="visual-orb orb-2"></div>
+                <div class="visual-orb orb-3"></div>
+                <div class="visual-card card-float">
+                    <div class="card-header">
+                        <span class="card-icon">🤖</span>
+                        <span>AI Processing</span>
+                    </div>
+                    <div class="card-content">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <span class="progress-text">Generating...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features-section">
+            <div class="section-header">
+                <span class="section-badge">Capabilities</span>
+                <h2 class="section-title">Five Powerful APIs, One Platform</h2>
+                <p class="section-description">Seamlessly integrated services to power your next breakthrough</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" data-api="openai">
+                    <div class="feature-icon">🧠</div>
+                    <h3 class="feature-title">OpenAI GPT</h3>
+                    <p class="feature-description">Advanced language models for text generation, analysis, and conversation</p>
+                    <ul class="feature-list">
+                        <li>Text completion & chat</li>
+                        <li>Code generation</li>
+                        <li>Content analysis</li>
+                    </ul>
+                    <span class="feature-status status-active">Active</span>
+                </div>
+                <div class="feature-card" data-api="replicate">
+                    <div class="feature-icon">🎨</div>
+                    <h3 class="feature-title">Replicate AI</h3>
+                    <p class="feature-description">State-of-the-art image generation and visual AI processing</p>
+                    <ul class="feature-list">
+                        <li>Image generation</li>
+                        <li>Style transfer</li>
+                        <li>Image enhancement</li>
+                    </ul>
+                    <span class="feature-status status-active">Active</span>
+                </div>
+                <div class="feature-card" data-api="stripe">
+                    <div class="feature-icon">💳</div>
+                    <h3 class="feature-title">Stripe Payments</h3>
+                    <p class="feature-description">Secure payment processing for subscriptions and one-time purchases</p>
+                    <ul class="feature-list">
+                        <li>Subscription billing</li>
+                        <li>One-time payments</li>
+                        <li>Invoice management</li>
+                    </ul>
+                    <span class="feature-status status-active">Active</span>
+                </div>
+                <div class="feature-card" data-api="slack">
+                    <div class="feature-icon">💬</div>
+                    <h3 class="feature-title">Slack Integration</h3>
+                    <p class="feature-description">Real-time notifications and team collaboration features</p>
+                    <ul class="feature-list">
+                        <li>Instant notifications</li>
+                        <li>Channel updates</li>
+                        <li>Bot interactions</li>
+                    </ul>
+                    <span class="feature-status status-active">Active</span>
+                </div>
+                <div class="feature-card" data-api="mailchimp">
+                    <div class="feature-icon">📧</div>
+                    <h3 class="feature-title">Mailchimp</h3>
+                    <p class="feature-description">Email marketing automation and subscriber management</p>
+                    <ul class="feature-list">
+                        <li>Email campaigns</li>
+                        <li>List management</li>
+                        <li>Analytics tracking</li>
+                    </ul>
+                    <span class="feature-status status-active">Active</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Studio Section -->
+        <section id="ai-studio" class="studio-section">
+            <div class="section-header">
+                <span class="section-badge">Interactive</span>
+                <h2 class="section-title">AI Studio</h2>
+                <p class="section-description">Experience the power of integrated AI right here</p>
+            </div>
+            <div class="studio-container">
+                <div class="studio-tabs">
+                    <button class="studio-tab active" data-tab="text">
+                        <span class="tab-icon">🧠</span>
+                        <span>Text AI</span>
+                    </button>
+                    <button class="studio-tab" data-tab="image">
+                        <span class="tab-icon">🎨</span>
+                        <span>Image AI</span>
+                    </button>
+                    <button class="studio-tab" data-tab="chat">
+                        <span class="tab-icon">💬</span>
+                        <span>Chat</span>
+                    </button>
+                </div>
+                <div class="studio-workspace">
+                    <!-- Text AI Panel -->
+                    <div class="studio-panel active" id="text-panel">
+                        <div class="panel-input">
+                            <label for="text-prompt">Enter your prompt</label>
+                            <textarea id="text-prompt" placeholder="Ask anything... Generate content, analyze text, or get creative ideas"></textarea>
+                            <div class="input-actions">
+                                <select id="text-model" class="model-select">
+                                    <option value="gpt-4">GPT-4 Turbo</option>
+                                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                                </select>
+                                <button class="btn btn-primary" id="generate-text-btn">
+                                    Generate
+                                    <span class="btn-icon">✨</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="panel-output">
+                            <div class="output-header">
+                                <span>Response</span>
+                                <button class="btn btn-ghost btn-sm" id="copy-text-btn">Copy</button>
+                            </div>
+                            <div class="output-content" id="text-output">
+                                <p class="placeholder-text">Your AI-generated content will appear here...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Image AI Panel -->
+                    <div class="studio-panel" id="image-panel">
+                        <div class="panel-input">
+                            <label for="image-prompt">Describe your image</label>
+                            <textarea id="image-prompt" placeholder="A futuristic cityscape at sunset with flying vehicles..."></textarea>
+                            <div class="input-actions">
+                                <select id="image-model" class="model-select">
+                                    <option value="sdxl">Stable Diffusion XL</option>
+                                    <option value="flux">FLUX.1</option>
+                                </select>
+                                <button class="btn btn-primary" id="generate-image-btn">
+                                    Generate
+                                    <span class="btn-icon">🎨</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="panel-output image-output">
+                            <div class="output-header">
+                                <span>Generated Image</span>
+                                <button class="btn btn-ghost btn-sm" id="download-image-btn">Download</button>
+                            </div>
+                            <div class="output-content" id="image-output">
+                                <div class="image-placeholder">
+                                    <span class="placeholder-icon">🖼️</span>
+                                    <p>Your generated image will appear here</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Chat Panel -->
+                    <div class="studio-panel" id="chat-panel">
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="chat-message system">
+                                <div class="message-avatar">🤖</div>
+                                <div class="message-content">
+                                    <p>Hello! I'm your AI assistant. How can I help you today?</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" id="chat-input" placeholder="Type your message..." />
+                            <button class="btn btn-primary btn-icon-only" id="send-chat-btn">
+                                <span>➤</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="pricing-section">
+            <div class="section-header">
+                <span class="section-badge">Pricing</span>
+                <h2 class="section-title">Simple, Transparent Pricing</h2>
+                <p class="section-description">Start free, scale as you grow</p>
+            </div>
+            <div class="pricing-toggle">
+                <span class="toggle-label">Monthly</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="billing-toggle">
+                    <span class="toggle-slider"></span>
+                </label>
+                <span class="toggle-label">Annual <span class="save-badge">Save 20%</span></span>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3 class="plan-name">Starter</h3>
+                        <p class="plan-description">Perfect for exploring AI capabilities</p>
+                    </div>
+                    <div class="pricing-amount">
+                        <span class="currency">$</span>
+                        <span class="price" data-monthly="0" data-annual="0">0</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><span class="check">✓</span> 100 AI generations/month</li>
+                        <li><span class="check">✓</span> Basic text & image AI</li>
+                        <li><span class="check">✓</span> Community support</li>
+                        <li><span class="check">✓</span> API documentation</li>
+                    </ul>
+                    <button class="btn btn-outline btn-block" data-plan="starter">Get Started</button>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="featured-badge">Most Popular</div>
+                    <div class="pricing-header">
+                        <h3 class="plan-name">Pro</h3>
+                        <p class="plan-description">For professionals and growing teams</p>
+                    </div>
+                    <div class="pricing-amount">
+                        <span class="currency">$</span>
+                        <span class="price" data-monthly="49" data-annual="39">49</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><span class="check">✓</span> 5,000 AI generations/month</li>
+                        <li><span class="check">✓</span> All 5 API integrations</li>
+                        <li><span class="check">✓</span> Priority support</li>
+                        <li><span class="check">✓</span> Advanced analytics</li>
+                        <li><span class="check">✓</span> Custom workflows</li>
+                    </ul>
+                    <button class="btn btn-primary btn-block" data-plan="pro">Start Pro Trial</button>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3 class="plan-name">Enterprise</h3>
+                        <p class="plan-description">Custom solutions for large organizations</p>
+                    </div>
+                    <div class="pricing-amount">
+                        <span class="currency">$</span>
+                        <span class="price" data-monthly="199" data-annual="159">199</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><span class="check">✓</span> Unlimited generations</li>
+                        <li><span class="check">✓</span> Dedicated infrastructure</li>
+                        <li><span class="check">✓</span> 24/7 premium support</li>
+                        <li><span class="check">✓</span> Custom integrations</li>
+                        <li><span class="check">✓</span> SLA guarantee</li>
+                        <li><span class="check">✓</span> On-premise option</li>
+                    </ul>
+                    <button class="btn btn-outline btn-block" data-plan="enterprise">Contact Sales</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact/Newsletter Section -->
+        <section id="contact" class="contact-section">
+            <div class="contact-container">
+                <div class="contact-content">
+                    <h2 class="contact-title">Stay in the Loop</h2>
+                    <p class="contact-description">
+                        Get the latest updates, AI tips, and exclusive early access to new features.
+                    </p>
+                    <form class="newsletter-form" id="newsletter-form">
+                        <div class="form-group">
+                            <input type="email" id="newsletter-email" placeholder="Enter your email" required>
+                            <button type="submit" class="btn btn-primary">
+                                Subscribe
+                                <span class="btn-icon">→</span>
+                            </button>
+                        </div>
+                        <p class="form-notice">No spam, unsubscribe anytime. We respect your privacy.</p>
+                    </form>
+                    <div class="newsletter-success" id="newsletter-success" style="display: none;">
+                        <span class="success-icon">✓</span>
+                        <p>You're subscribed! Check your email for confirmation.</p>
+                    </div>
+                </div>
+                <div class="contact-visual">
+                    <div class="visual-card">
+                        <div class="notification-stack">
+                            <div class="notification">
+                                <span class="notif-icon">🚀</span>
+                                <span>New feature launched!</span>
+                            </div>
+                            <div class="notification">
+                                <span class="notif-icon">🎨</span>
+                                <span>Image AI 2.0 is here</span>
+                            </div>
+                            <div class="notification">
+                                <span class="notif-icon">💡</span>
+                                <span>Weekly AI tips</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-main">
+                <div class="footer-brand">
+                    <div class="brand">
+                        <span class="brand-icon">🔮</span>
+                        <span class="brand-text">NEOSAI<span class="accent">APEX</span></span>
+                    </div>
+                    <p class="footer-tagline">Transforming ideas into reality with AI</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Twitter">𝕏</a>
+                        <a href="#" class="social-link" aria-label="GitHub">⌘</a>
+                        <a href="#" class="social-link" aria-label="Discord">◎</a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <ul>
+                            <li><a href="#features">Features</a></li>
+                            <li><a href="#pricing">Pricing</a></li>
+                            <li><a href="#ai-studio">AI Studio</a></li>
+                            <li><a href="#">Documentation</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">Cookie Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 NEOSAI APEX. All rights reserved.</p>
+                <p class="powered-by">Powered by OpenAI, Replicate, Stripe, Slack & Mailchimp</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="auth-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="close-modal">&times;</button>
+            <div class="modal-header">
+                <h2 id="modal-title">Get Started</h2>
+            </div>
+            <div class="modal-body">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" data-auth="login">Sign In</button>
+                    <button class="auth-tab" data-auth="signup">Sign Up</button>
+                </div>
+                <form class="auth-form" id="auth-form">
+                    <div class="form-group">
+                        <label for="auth-email">Email</label>
+                        <input type="email" id="auth-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="auth-password">Password</label>
+                        <input type="password" id="auth-password" required>
+                    </div>
+                    <div class="form-group signup-only" style="display: none;">
+                        <label for="auth-confirm">Confirm Password</label>
+                        <input type="password" id="auth-confirm">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <span id="auth-btn-text">Sign In</span>
+                    </button>
+                </form>
+                <div class="auth-divider">
+                    <span>or continue with</span>
+                </div>
+                <div class="social-auth">
+                    <button class="btn btn-outline social-btn">
+                        <span>G</span> Google
+                    </button>
+                    <button class="btn btn-outline social-btn">
+                        <span>⌘</span> GitHub
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
