@@ -1,0 +1,19 @@
+title: NEOSAI APEX
+description: Intelligent Automation Platform
+baseurl: ""
+url: "https://www.sai8.com"
+
+include:
+  - index.html
+  - css
+  - js
+  - assets
+  - worker.js
+
+exclude:
+  - README.md
+  - netlify.toml
+  - vercel.json
+  - "*.md"
+
+plugins: []
