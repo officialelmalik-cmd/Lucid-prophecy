@@ -1,4 +1,14 @@
 {
+  "name": "lucid-prophecy",
+  "version": "1.0.0",
+  "description": "A lucid prophecy package",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 'Error: no test specified' && exit 1"
+  },
+  "author": "officialelmalik-cmd",
+  "license": "ISC"
+}
   "name": "neosai-apex",
   "version": "2.0.0",
   "description": "NEOSAI APEX - Unified AI, Commerce, Media & Communications Platform",
