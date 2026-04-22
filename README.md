@@ -7,11 +7,20 @@ Unified platform for AI, commerce, media generation, and automated communication
 - **AI Assistant** - GPT-powered text generation via OpenAI
 - **Media Studio** - Image/audio generation via Replicate (SDXL, Flux, MusicGen)
 - **Commerce Hub** - Stripe payments, subscriptions, checkout flows
-- **Slack Integration** - Automated messaging and notifications
+- **Slack Integration** - Automated messaging, notifications, and bot conversation history
 - **Email Campaigns** - Mailchimp automation for newsletters
 - **Analytics** - Usage metrics and API health monitoring
 - **Workflows** - Chain modules together for automation pipelines
 - **Storage** - Manage generated assets and exports
+
+### Slack Bot History
+
+The Slack module includes full conversation history retrieval:
+- View bot information and connection status
+- Browse all accessible channels (public, private, DMs)
+- Load and view message history with timestamps
+- Export conversation history to JSON
+- Identify bot vs user messages
 
 ## Quick Start
 

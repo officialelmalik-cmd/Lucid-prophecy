@@ -1,0 +1,31 @@
+{
+  "name": "neosai-apex",
+  "version": "1.0.0",
+  "description": "Unified platform for AI, commerce, media generation, and automated communications",
+  "scripts": {
+    "dev": "npx serve .",
+    "deploy:worker": "echo 'Deploy worker.js to Cloudflare Workers or Deno Deploy'",
+    "lint": "echo 'No linting configured'",
+    "build": "echo 'Static site - no build required'"
+  },
+  "keywords": [
+    "ai",
+    "openai",
+    "stripe",
+    "replicate",
+    "slack",
+    "mailchimp",
+    "automation",
+    "media-generation"
+  ],
+  "author": "NEOSAI",
+  "license": "MIT",
+  "homepage": "https://www.sai8.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/officialelmalik-cmd/lucid-prophecy"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
