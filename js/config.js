@@ -13,7 +13,7 @@ const NeoConfig = {
         slack_channel: '',
         mailchimp_key: '',
         mailchimp_list: '',
-        worker_url: ''
+        worker_url: 'https://neosai-apex-worker.workers.dev'
     },
 
     load() {
