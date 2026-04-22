@@ -1,13 +1,14 @@
-name = "neosai-apex-worker"
+name = "neosai-apex-v2"
 main = "worker.js"
-compatibility_date = "2024-01-01"
+compatibility_date = "2024-03-25"
 
 workers_dev = true
 
 [vars]
 ENVIRONMENT = "production"
+NODE_ENV = "production"
 
-# Secrets (set via wrangler secret put or dashboard):
+# Secrets - set via Cloudflare Dashboard or: wrangler secret put <KEY_NAME>
 # OPENAI_API_KEY
 # ANTHROPIC_API_KEY
 # STRIPE_SECRET_KEY
