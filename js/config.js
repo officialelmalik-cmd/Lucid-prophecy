@@ -3,6 +3,7 @@ const NeoConfig = {
 
     keys: {
         openai: '',
+        anthropic: '',
         stripe_pk: '',
         stripe_sk: '',
         stripe_price: '',
@@ -40,6 +41,7 @@ const NeoConfig = {
         localStorage.removeItem(this.STORAGE_KEY);
         this.keys = {
             openai: '',
+            anthropic: '',
             stripe_pk: '',
             stripe_sk: '',
             stripe_price: '',
@@ -97,6 +99,7 @@ function initConfigModal() {
 
     const fields = {
         'openai-key': 'openai',
+        'anthropic-key': 'anthropic',
         'stripe-pk': 'stripe_pk',
         'stripe-sk': 'stripe_sk',
         'stripe-price': 'stripe_price',

@@ -1,0 +1,24 @@
+name = "neosai-apex-worker"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+ENVIRONMENT = "production"
+
+# Uncomment and add your KV namespace if using storage
+# [[kv_namespaces]]
+# binding = "NEOSAI_KV"
+# id = "your-kv-namespace-id"
+
+# Environment variables (set via dashboard or wrangler secret put)
+# OPENAI_API_KEY
+# STRIPE_SECRET_KEY
+# REPLICATE_API_TOKEN
+# SLACK_BOT_TOKEN
+# MAILCHIMP_API_KEY
+
+[env.staging]
+name = "neosai-apex-worker-staging"
+
+[env.staging.vars]
+ENVIRONMENT = "staging"
