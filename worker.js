@@ -637,63 +637,6 @@ async function handleAnalytics(env) {
     });
 }
 
-async function handleSlackHistory(data, env) {
-    const token = data.token || env.SLACK_BOT_TOKEN;
-    if (!token) {
-        return jsonResponse({ error: 'Slack bot token not configured' }, 400);
-    }
-
-    const params = new URLSearchParams({
-        channel: data.channel,
-        limit: data.limit || '50'
-    });
-
-    if (data.cursor) {
-        params.append('cursor', data.cursor);
-    }
-
-    const response = await fetch(`https://slack.com/api/conversations.history?${params}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-    });
-
-    const result = await response.json();
-
-    if (!result.ok) {
-        return jsonResponse({ error: result.error || 'Failed to fetch history' }, 400);
-    }
-
-    return jsonResponse({
-        messages: result.messages || [],
-        has_more: result.has_more || false,
-        next_cursor: result.response_metadata?.next_cursor || null
-    });
-}
-
-async function handleSlackBotInfo(data, env) {
-    const token = data.token || env.SLACK_BOT_TOKEN;
-    if (!token) {
-        return jsonResponse({ error: 'Slack bot token not configured' }, 400);
-    }
-
-    const authResponse = await fetch('https://slack.com/api/auth.test', {
-        headers: { 'Authorization': `Bearer ${token}` }
-    });
-
-    const authResult = await authResponse.json();
-
-    if (!authResult.ok) {
-        return jsonResponse({ error: authResult.error || 'Auth failed' }, 400);
-    }
-
-    return jsonResponse({
-        bot_id: authResult.bot_id,
-        user_id: authResult.user_id,
-        team: authResult.team,
-        team_id: authResult.team_id,
-        url: authResult.url
-    });
-}
-
 async function handleSlackChannels(data, env) {
     const token = data.token || env.SLACK_BOT_TOKEN;
     if (!token) {
