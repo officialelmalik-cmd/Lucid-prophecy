@@ -1,4 +1,14 @@
 {
+  "name": "lucid-prophecy",
+  "version": "1.0.0",
+  "description": "A lucid prophecy package",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 'Error: no test specified' && exit 1"
+  },
+  "author": "officialelmalik-cmd",
+  "license": "ISC"
+}
   "name": "neosai-apex",
   "version": "2.0.0",
   "description": "NEOSAI APEX - Unified AI, Commerce, Media & Communications Platform",
@@ -36,3 +46,4 @@
     "node": ">=18.0.0"
   }
 }
+{\n  "name": "NEOSAI APEX Project",\n  "version": "1.0.0",\n  "description": "A comprehensive project for APEX framework development and integration.",\n  "main": "index.js",\n  "scripts": {\n    "test": "echo 'Error: no test specified' && exit 1"\n  },\n  "repository": {\n    "type": "git",\n    "url": "https://github.com/officialelmalik-cmd/Lucid-prophecy.git"\n  },\n  "keywords": [\n    "NEOSAI",\n    "APEX",\n    "framework"\n  ],\n  "author": "Your Name",\n  "license": "ISC"\n}
