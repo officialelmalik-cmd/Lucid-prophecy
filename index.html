@@ -42,7 +42,7 @@
             <h1>NEOSAI APEX Platform</h1>
             <p>Complete AI ecosystem for creation, commerce, communication, and automation — all in one dashboard.</p>
             <div class="hero-stats">
-                <div class="hero-stat"><span class="hero-stat-n">13</span><span class="hero-stat-l">Modules</span></div>
+                <div class="hero-stat"><span class="hero-stat-n">15</span><span class="hero-stat-l">Modules</span></div>
                 <div class="hero-stat"><span class="hero-stat-n">6+</span><span class="hero-stat-l">AI Models</span></div>
                 <div class="hero-stat"><span class="hero-stat-n">∞</span><span class="hero-stat-l">Possibilities</span></div>
             </div>
@@ -168,6 +168,28 @@
             </article>
         </section>
 
+        <!-- Delegation & Automation Section -->
+        <div class="section-label" id="delegation">
+            <span class="section-icon">🎯</span> Delegation & Automation
+        </div>
+        <section class="modules-grid">
+            <article class="module-card" id="mod-jira">
+                <div class="module-icon">📋</div>
+                <h3>Jira Project Hub</h3>
+                <p>Issues, sprints, boards, bulk delegation, AI task breakdown, and automation rules.</p>
+                <div class="module-status" data-api="jira">Not configured</div>
+                <button class="module-btn" data-module="jira">Launch</button>
+            </article>
+
+            <article class="module-card" id="mod-automation">
+                <div class="module-icon">⚡</div>
+                <h3>Automation Hub</h3>
+                <p>AI command center, pipelines, schedules, and multi-service integrations.</p>
+                <div class="module-status always-active">Active</div>
+                <button class="module-btn" data-module="automation">Launch</button>
+            </article>
+        </section>
+
         <section class="workspace" id="workspace">
             <div class="workspace-header">
                 <h2 id="workspace-title">Select a Module</h2>
@@ -249,6 +271,21 @@
                     <input type="text" id="mailchimp-list" placeholder="abc123def4" autocomplete="off">
                 </div>
 
+                <div class="config-section-label">Jira / Project Management</div>
+                <div class="config-group">
+                    <label for="jira-domain">Jira Domain</label>
+                    <input type="text" id="jira-domain" placeholder="your-domain.atlassian.net" autocomplete="off">
+                </div>
+                <div class="config-group">
+                    <label for="jira-email">Jira Email</label>
+                    <input type="email" id="jira-email" placeholder="you@company.com" autocomplete="off">
+                </div>
+                <div class="config-group">
+                    <label for="jira-token">Jira API Token</label>
+                    <input type="password" id="jira-token" placeholder="Atlassian API token" autocomplete="off">
+                    <span class="config-hint">id.atlassian.com/manage-profile/security/api-tokens</span>
+                </div>
+
                 <div class="config-section-label">Backend</div>
                 <div class="config-group">
                     <label for="worker-url">Backend Worker URL</label>
@@ -280,6 +317,8 @@
     <script src="js/modules/voice.js"></script>
     <script src="js/modules/socialmedia.js"></script>
     <script src="js/modules/tools.js"></script>
+    <script src="js/modules/jira.js"></script>
+    <script src="js/modules/automation.js"></script>
     <script src="js/app.js"></script>
     <script>
         if ('serviceWorker' in navigator) {

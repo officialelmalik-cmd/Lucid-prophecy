@@ -54,7 +54,9 @@ const NeoApp = {
             gamestudio: 'Game Studio',
             voice: 'Voice Studio',
             social: 'Social Media',
-            tools: 'Tools Hub'
+            tools: 'Tools Hub',
+            jira: 'Jira Project Hub',
+            automation: 'Automation Hub'
         };
 
         const badges = {
@@ -62,7 +64,7 @@ const NeoApp = {
             slack: '💬 Slack', mailchimp: '✉️ Email', analytics: '📊 Analytics',
             workflows: '⚙️ Workflows', storage: '🗂️ Storage',
             gamestudio: '🎮 Game Studio', voice: '🎙️ Voice', social: '📱 Social',
-            tools: '🛠️ Tools'
+            tools: '🛠️ Tools', jira: '📋 Jira', automation: '⚡ Automation'
         };
 
         this.workspaceTitle.textContent = titles[name] || name;
@@ -82,6 +84,8 @@ const NeoApp = {
             case 'voice': NeoVoice.render(this.workspaceContent); break;
             case 'social': NeoSocial.render(this.workspaceContent); break;
             case 'tools': NeoTools.render(this.workspaceContent); break;
+            case 'jira': NeoJira.render(this.workspaceContent); break;
+            case 'automation': NeoAutomation.render(this.workspaceContent); break;
             default:
                 this.workspaceContent.innerHTML = '<p class="workspace-placeholder">Module not found.</p>';
         }

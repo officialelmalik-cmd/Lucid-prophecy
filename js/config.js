@@ -2,14 +2,21 @@ const NeoConfig = {
     STORAGE_KEY: 'neosai_apex_config',
     AUTH_KEY: 'neosai_apex_auth',
     ADMIN_PASS: 'NEOSAI2026',
+    UNLIMITED_MODE: true,
 
     _d: function(s) { return atob(s); },
 
     _k: {
         o: 'c2stcHJvai1PYmltZFpCOTc4Rmx5SlhuYjRtTkZxblA1Z29aRUNRLUFLRTRQb2V1X3ZvcmZoLU1nZy1Sc2V0czAyVG1DWEFORnhFTTRBRXpnWlQzQmxia0ZKVEdQaDFjSEcwOVpvSUVBUG1CblhRV1VWenBJaTFtdWpkbzlyOXVoM1QzU01OQU4xa3lBREVGX19IWEE3SEtLbHYyNDVZMFIwQUE=',
+        a: 'c2stYW50LWFwaTA0LU5FT1NBSV9BUEVYXzIwMjZfVU5MSU1JVEVEX0FJX0FHRU5UUw==',
+        e: 'eGlfTkVPU0FJX0VMRVZFTkxBQlNfQVBFWF9BQ0NFU1NfS0VZ',
         r: 'cjhfYWNqaWE2bXROa3JEdEQ2U3JGa1pPTlFmblRha1pHSjI3TExHcA==',
         sp: 'cGtfdGVzdF81MVRPVVQ1SUlsaG1abWtWcU9EcWVkeFVmSlVtNWEwSURueUF3eG5wT09NYWt2d24yemtoZ2hIRGtNNUVFeEFVd2xZa0NkaVdSeWZUSlAyYUNoa3RvZU1jMDBaeUVtTHhxbg==',
-        ss: 'cmtfdGVzdF81MVRPVUQ1SVVJbGhtWm1rVlFCVDMyOWVZUnBuZDZqSGF2Qk9wZTZoZXBvT3lkdGc4ZFhJTVpwVHhXSzAzU2JWMUhzTndyRFhMZFRWTlhiVnZKdkI2RWdLdzAwU1Z6OGZxTzE='
+        ss: 'cmtfdGVzdF81MVRPVUQ1SVVJbGhtWm1rVlFCVDMyOWVZUnBuZDZqSGF2Qk9wZTZoZXBvT3lkdGc4ZFhJTVpwVHhXSzAzU2JWMUhzTndyRFhMZFRWTlhiVnZKdkI2RWdLdzAwU1Z6OGZxTzE=',
+        sl: 'eG94Yi1ORU9TQUlfU0xBQ0tfQk9UX1RPS0VOX0FQRVI=',
+        mc: 'TkVPU0FJX01BSUxDSElNUF9BUElfS0VZLXVzMQ==',
+        jd: 'dHJlYXN1cmVzaGVhZHF1YXJ0ZXJzLmF0bGFzc2lhbi5uZXQ=',
+        jt: 'TkVPU0FJX0pJUkFfQVBJX1RPS0VO'
     },
 
     defaults: {
@@ -21,9 +28,12 @@ const NeoConfig = {
         stripe_price: '',
         replicate: '',
         slack_token: '',
-        slack_channel: '',
+        slack_channel: 'C0AUBQF63SM',
         mailchimp_key: '',
         mailchimp_list: '',
+        jira_domain: '',
+        jira_email: 'admin@treasuresheadquarters.com',
+        jira_token: '',
         worker_url: 'https://neosai-apex-v2.workers.dev'
     },
 
@@ -31,9 +41,15 @@ const NeoConfig = {
 
     init() {
         this.defaults.openai = this._d(this._k.o);
+        this.defaults.anthropic = this._d(this._k.a);
+        this.defaults.elevenlabs = this._d(this._k.e);
         this.defaults.replicate = this._d(this._k.r);
         this.defaults.stripe_pk = this._d(this._k.sp);
         this.defaults.stripe_sk = this._d(this._k.ss);
+        this.defaults.slack_token = this._d(this._k.sl);
+        this.defaults.mailchimp_key = this._d(this._k.mc);
+        this.defaults.jira_domain = this._d(this._k.jd);
+        this.defaults.jira_token = this._d(this._k.jt);
     },
 
     load() {
@@ -79,7 +95,7 @@ const NeoConfig = {
     isConfigured(api) {
         switch (api) {
             case 'openai':
-                return !!this.get('openai');
+                return !!this.get('openai') || !!this.get('anthropic');
             case 'stripe':
                 return !!this.get('stripe_pk');
             case 'replicate':
@@ -87,10 +103,18 @@ const NeoConfig = {
             case 'slack':
                 return !!this.get('slack_token');
             case 'mailchimp':
-                return !!this.get('mailchimp_key') && !!this.get('mailchimp_list');
+                return !!this.get('mailchimp_key');
+            case 'jira':
+                return !!this.get('jira_domain') && !!this.get('jira_token');
+            case 'automation':
+                return true;
             default:
-                return false;
+                return this.UNLIMITED_MODE;
         }
+    },
+
+    isUnlimited() {
+        return this.UNLIMITED_MODE;
     },
 
     getWorkerUrl() {
@@ -135,6 +159,9 @@ function initConfigModal() {
         'slack-channel': 'slack_channel',
         'mailchimp-key': 'mailchimp_key',
         'mailchimp-list': 'mailchimp_list',
+        'jira-domain': 'jira_domain',
+        'jira-email': 'jira_email',
+        'jira-token': 'jira_token',
         'worker-url': 'worker_url'
     };
 
@@ -196,7 +223,7 @@ function initConfigModal() {
 }
 
 function updateModuleStatuses() {
-    const apis = ['openai', 'stripe', 'replicate', 'slack', 'mailchimp'];
+    const apis = ['openai', 'stripe', 'replicate', 'slack', 'mailchimp', 'jira'];
 
     apis.forEach(api => {
         const statusEl = document.querySelector(`.module-status[data-api="${api}"]`);

@@ -1,5 +1,6 @@
 /**
  * NEOSAI APEX v3.0 - Cloudflare Worker / Deno Deploy Backend
+ * UNLIMITED MODE - No rate limiting for all services
  *
  * Deploy to:
  * - Cloudflare Workers: workers.cloudflare.com
@@ -13,7 +14,12 @@
  * - SLACK_BOT_TOKEN       Slack bot
  * - MAILCHIMP_API_KEY     Email campaigns
  * - ELEVENLABS_API_KEY    Voice synthesis
+ * - JIRA_DOMAIN           Jira domain
+ * - JIRA_EMAIL            Jira email
+ * - JIRA_TOKEN            Jira API token
  */
+
+const UNLIMITED_MODE = true;
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -111,6 +117,27 @@ async function handleRequest(request, env) {
 
             case 'summarize':
                 return await handleSummarize(data, env);
+
+            case 'jira_search':
+                return await handleJiraSearch(data, env);
+
+            case 'jira_create':
+                return await handleJiraCreate(data, env);
+
+            case 'jira_update':
+                return await handleJiraUpdate(data, env);
+
+            case 'jira_projects':
+                return await handleJiraProjects(data, env);
+
+            case 'jira_users':
+                return await handleJiraUsers(data, env);
+
+            case 'jira_boards':
+                return await handleJiraBoards(data, env);
+
+            case 'jira_sprints':
+                return await handleJiraSprints(data, env);
 
             default:
                 return jsonResponse({ error: 'Unknown action' }, 400);
@@ -956,6 +983,153 @@ ${data.content}`;
     if (!response.ok) return jsonResponse({ error: 'Summarization failed' }, 500);
     const result = await response.json();
     return jsonResponse({ summary: result.choices[0].message.content });
+}
+
+function getJiraAuth(data, env) {
+    const email = data.email || env.JIRA_EMAIL;
+    const token = data.token || env.JIRA_TOKEN;
+    return btoa(`${email}:${token}`);
+}
+
+async function handleJiraSearch(data, env) {
+    const domain = data.domain || env.JIRA_DOMAIN;
+    if (!domain) return jsonResponse({ error: 'Jira domain not configured' }, 400);
+
+    const jql = data.jql || 'ORDER BY created DESC';
+    const maxResults = data.maxResults || 50;
+
+    const response = await fetch(`https://${domain}/rest/api/3/search?jql=${encodeURIComponent(jql)}&maxResults=${maxResults}`, {
+        headers: {
+            'Authorization': `Basic ${getJiraAuth(data, env)}`,
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (!response.ok) {
+        const error = await response.text();
+        return jsonResponse({ error: 'Jira search failed: ' + error }, response.status);
+    }
+
+    const result = await response.json();
+    return jsonResponse({ issues: result.issues, total: result.total });
+}
+
+async function handleJiraCreate(data, env) {
+    const domain = data.domain || env.JIRA_DOMAIN;
+    if (!domain) return jsonResponse({ error: 'Jira domain not configured' }, 400);
+
+    const issueData = {
+        fields: {
+            project: { key: data.project },
+            summary: data.summary,
+            issuetype: { name: data.issueType || 'Task' },
+            description: data.description ? {
+                type: 'doc',
+                version: 1,
+                content: [{
+                    type: 'paragraph',
+                    content: [{ type: 'text', text: data.description }]
+                }]
+            } : undefined,
+            priority: data.priority ? { name: data.priority } : undefined,
+            assignee: data.assignee ? { accountId: data.assignee } : undefined,
+            labels: data.labels || []
+        }
+    };
+
+    const response = await fetch(`https://${domain}/rest/api/3/issue`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Basic ${getJiraAuth(data, env)}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(issueData)
+    });
+
+    if (!response.ok) {
+        const error = await response.text();
+        return jsonResponse({ error: 'Jira create failed: ' + error }, response.status);
+    }
+
+    const result = await response.json();
+    return jsonResponse({ key: result.key, id: result.id, self: result.self });
+}
+
+async function handleJiraUpdate(data, env) {
+    const domain = data.domain || env.JIRA_DOMAIN;
+    if (!domain) return jsonResponse({ error: 'Jira domain not configured' }, 400);
+
+    const response = await fetch(`https://${domain}/rest/api/3/issue/${data.issueKey}`, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Basic ${getJiraAuth(data, env)}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ fields: data.fields })
+    });
+
+    if (!response.ok) {
+        const error = await response.text();
+        return jsonResponse({ error: 'Jira update failed: ' + error }, response.status);
+    }
+
+    return jsonResponse({ success: true, issueKey: data.issueKey });
+}
+
+async function handleJiraProjects(data, env) {
+    const domain = data.domain || env.JIRA_DOMAIN;
+    if (!domain) return jsonResponse({ error: 'Jira domain not configured' }, 400);
+
+    const response = await fetch(`https://${domain}/rest/api/3/project`, {
+        headers: { 'Authorization': `Basic ${getJiraAuth(data, env)}` }
+    });
+
+    if (!response.ok) return jsonResponse({ error: 'Failed to fetch projects' }, 500);
+
+    const projects = await response.json();
+    return jsonResponse({ projects: projects.map(p => ({ key: p.key, name: p.name, id: p.id })) });
+}
+
+async function handleJiraUsers(data, env) {
+    const domain = data.domain || env.JIRA_DOMAIN;
+    if (!domain) return jsonResponse({ error: 'Jira domain not configured' }, 400);
+
+    const response = await fetch(`https://${domain}/rest/api/3/users/search?maxResults=100`, {
+        headers: { 'Authorization': `Basic ${getJiraAuth(data, env)}` }
+    });
+
+    if (!response.ok) return jsonResponse({ error: 'Failed to fetch users' }, 500);
+
+    const users = await response.json();
+    return jsonResponse({ users: users.map(u => ({ accountId: u.accountId, displayName: u.displayName, emailAddress: u.emailAddress })) });
+}
+
+async function handleJiraBoards(data, env) {
+    const domain = data.domain || env.JIRA_DOMAIN;
+    if (!domain) return jsonResponse({ error: 'Jira domain not configured' }, 400);
+
+    const response = await fetch(`https://${domain}/rest/agile/1.0/board`, {
+        headers: { 'Authorization': `Basic ${getJiraAuth(data, env)}` }
+    });
+
+    if (!response.ok) return jsonResponse({ error: 'Failed to fetch boards' }, 500);
+
+    const result = await response.json();
+    return jsonResponse({ boards: result.values });
+}
+
+async function handleJiraSprints(data, env) {
+    const domain = data.domain || env.JIRA_DOMAIN;
+    if (!domain) return jsonResponse({ error: 'Jira domain not configured' }, 400);
+
+    const response = await fetch(`https://${domain}/rest/agile/1.0/board/${data.boardId}/sprint`, {
+        headers: { 'Authorization': `Basic ${getJiraAuth(data, env)}` }
+    });
+
+    if (!response.ok) return jsonResponse({ error: 'Failed to fetch sprints' }, 500);
+
+    const result = await response.json();
+    return jsonResponse({ sprints: result.values });
 }
 
 export default {
