@@ -34,7 +34,7 @@ const NeoConfig = {
         jira_domain: '',
         jira_email: 'admin@treasuresheadquarters.com',
         jira_token: '',
-        worker_url: 'https://neosai-apex-v2.workers.dev'
+        worker_url: 'https://8plasmacell8.workers.dev'
     },
 
     keys: {},
