@@ -1,16 +1,18 @@
 /**
- * NEOSAI APEX - Cloudflare Worker / Deno Deploy Backend
+ * NEOSAI APEX v3.0 - Cloudflare Worker / Deno Deploy Backend
  *
  * Deploy to:
  * - Cloudflare Workers: workers.cloudflare.com
  * - Deno Deploy: dash.deno.com
  *
- * Set environment variables:
- * - OPENAI_API_KEY
- * - STRIPE_SECRET_KEY
- * - REPLICATE_API_TOKEN
- * - SLACK_BOT_TOKEN
- * - MAILCHIMP_API_KEY
+ * Environment variables:
+ * - OPENAI_API_KEY        OpenAI GPT-4
+ * - ANTHROPIC_API_KEY     Claude AI
+ * - STRIPE_SECRET_KEY     Stripe payments
+ * - REPLICATE_API_TOKEN   Image/video/audio generation
+ * - SLACK_BOT_TOKEN       Slack bot
+ * - MAILCHIMP_API_KEY     Email campaigns
+ * - ELEVENLABS_API_KEY    Voice synthesis
  */
 
 const corsHeaders = {
@@ -27,7 +29,18 @@ async function handleRequest(request, env) {
     const url = new URL(request.url);
 
     if (request.method === 'GET' && url.pathname === '/') {
-        return jsonResponse({ status: 'ok', service: 'NEOSAI APEX Worker', version: '1.0.0' });
+        return jsonResponse({
+            status: 'ok',
+            service: 'NEOSAI APEX Worker',
+            version: '3.0.0',
+            endpoints: [
+                'openai_chat', 'stripe_checkout', 'stripe_payment_link',
+                'replicate_generate', 'slack_post', 'slack_history', 'slack_bot_info',
+                'slack_channels', 'slack_search', 'mailchimp_subscribe', 'mailchimp_campaign',
+                'mailchimp_stats', 'analytics_summary', 'workflow_execute',
+                'voice_synthesize', 'seo_analyze', 'image_analyze', 'translate'
+            ]
+        });
     }
 
     if (request.method !== 'POST') {
@@ -89,6 +102,21 @@ async function handleRequest(request, env) {
 
             case 'slack_search':
                 return await handleSlackSearch(data, env);
+
+            case 'voice_synthesize':
+                return await handleVoiceSynthesize(data, env);
+
+            case 'seo_analyze':
+                return await handleSEOAnalyze(data, env);
+
+            case 'image_analyze':
+                return await handleImageAnalyze(data, env);
+
+            case 'translate':
+                return await handleTranslate(data, env);
+
+            case 'summarize':
+                return await handleSummarize(data, env);
 
             default:
                 return jsonResponse({ error: 'Unknown action' }, 400);
@@ -750,6 +778,190 @@ async function handleWorkflow(data, env) {
     }
 
     return jsonResponse({ success: true, results });
+}
+
+async function handleVoiceSynthesize(data, env) {
+    const provider = data.provider || 'openai';
+
+    if (provider === 'elevenlabs') {
+        const apiKey = data.apiKey || env.ELEVENLABS_API_KEY;
+        if (!apiKey) return jsonResponse({ error: 'ElevenLabs API key not configured' }, 400);
+
+        const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${data.voiceId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'xi-api-key': apiKey
+            },
+            body: JSON.stringify({
+                text: data.text,
+                model_id: data.model || 'eleven_multilingual_v2',
+                voice_settings: {
+                    stability: data.stability || 0.5,
+                    similarity_boost: data.similarity_boost || 0.75
+                }
+            })
+        });
+
+        if (!response.ok) {
+            const err = await response.text();
+            return jsonResponse({ error: 'ElevenLabs failed: ' + err }, response.status);
+        }
+
+        const audioBuffer = await response.arrayBuffer();
+        const base64 = btoa(String.fromCharCode(...new Uint8Array(audioBuffer)));
+        return jsonResponse({ audio_base64: base64, provider: 'elevenlabs' });
+    }
+
+    const apiKey = data.apiKey || env.OPENAI_API_KEY;
+    if (!apiKey) return jsonResponse({ error: 'OpenAI API key not configured' }, 400);
+
+    const response = await fetch('https://api.openai.com/v1/audio/speech', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+            model: data.model || 'tts-1-hd',
+            input: data.text,
+            voice: data.voice || 'nova',
+            speed: data.speed || 1.0
+        })
+    });
+
+    if (!response.ok) {
+        const err = await response.text();
+        return jsonResponse({ error: 'OpenAI TTS failed: ' + err }, response.status);
+    }
+
+    const audioBuffer = await response.arrayBuffer();
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(audioBuffer)));
+    return jsonResponse({ audio_base64: base64, provider: 'openai' });
+}
+
+async function handleSEOAnalyze(data, env) {
+    const apiKey = data.apiKey || env.OPENAI_API_KEY;
+    if (!apiKey) return jsonResponse({ error: 'OpenAI API key not configured' }, 400);
+
+    const prompt = `You are an expert SEO analyst. Analyze and optimize the following content:
+
+URL/Title: ${data.title || 'N/A'}
+Content: ${data.content}
+Target Keywords: ${data.keywords || 'auto-detect'}
+
+Provide:
+1. SEO Score (0-100)
+2. Primary Keyword Analysis
+3. Meta Title (optimized, under 60 chars)
+4. Meta Description (optimized, under 160 chars)
+5. Heading Structure Recommendations (H1, H2, H3)
+6. Content Issues (missing keywords, thin content, etc.)
+7. Internal Linking Opportunities
+8. Schema Markup Recommendations
+9. Page Speed Impact Factors
+10. Top 10 LSI Keywords to include
+11. Competitor Keywords to target
+12. Overall Recommendations (prioritized list)
+
+Be specific and actionable.`;
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+        body: JSON.stringify({
+            model: 'gpt-4-turbo-preview',
+            messages: [{ role: 'user', content: prompt }],
+            max_tokens: 2000
+        })
+    });
+
+    if (!response.ok) return jsonResponse({ error: 'SEO analysis failed' }, 500);
+    const result = await response.json();
+    return jsonResponse({ analysis: result.choices[0].message.content });
+}
+
+async function handleImageAnalyze(data, env) {
+    const apiKey = data.apiKey || env.OPENAI_API_KEY;
+    if (!apiKey) return jsonResponse({ error: 'OpenAI API key not configured' }, 400);
+
+    const prompt = data.prompt || 'Describe this image in detail. Include objects, colors, composition, mood, and any text visible.';
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+        body: JSON.stringify({
+            model: 'gpt-4o',
+            messages: [{
+                role: 'user',
+                content: [
+                    { type: 'text', text: prompt },
+                    { type: 'image_url', image_url: { url: data.imageUrl } }
+                ]
+            }],
+            max_tokens: 1000
+        })
+    });
+
+    if (!response.ok) return jsonResponse({ error: 'Image analysis failed' }, 500);
+    const result = await response.json();
+    return jsonResponse({ description: result.choices[0].message.content });
+}
+
+async function handleTranslate(data, env) {
+    const apiKey = data.apiKey || env.OPENAI_API_KEY || env.ANTHROPIC_API_KEY;
+    if (!apiKey) return jsonResponse({ error: 'API key not configured' }, 400);
+
+    const prompt = `Translate the following text to ${data.targetLanguage}. ${data.preserveFormatting ? 'Preserve all formatting, markdown, and structure.' : ''} Return ONLY the translated text, nothing else.
+
+Text to translate:
+${data.text}`;
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+        body: JSON.stringify({
+            model: 'gpt-4o',
+            messages: [{ role: 'user', content: prompt }],
+            max_tokens: data.text.length * 2 + 200
+        })
+    });
+
+    if (!response.ok) return jsonResponse({ error: 'Translation failed' }, 500);
+    const result = await response.json();
+    return jsonResponse({ translated: result.choices[0].message.content });
+}
+
+async function handleSummarize(data, env) {
+    const apiKey = data.apiKey || env.OPENAI_API_KEY;
+    if (!apiKey) return jsonResponse({ error: 'OpenAI API key not configured' }, 400);
+
+    const style = data.style || 'concise';
+    const styleInstructions = {
+        concise: 'Provide a concise 2-3 sentence summary capturing the key points.',
+        detailed: 'Provide a detailed summary with key points, insights, and conclusions.',
+        bullets: 'Summarize using 5-8 bullet points covering the main ideas.',
+        executive: 'Write an executive summary with: Key Findings, Recommendations, and Next Steps.'
+    };
+
+    const prompt = `${styleInstructions[style] || styleInstructions.concise}
+
+Content to summarize:
+${data.content}`;
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+        body: JSON.stringify({
+            model: 'gpt-4-turbo-preview',
+            messages: [{ role: 'user', content: prompt }],
+            max_tokens: 1000
+        })
+    });
+
+    if (!response.ok) return jsonResponse({ error: 'Summarization failed' }, 500);
+    const result = await response.json();
+    return jsonResponse({ summary: result.choices[0].message.content });
 }
 
 export default {

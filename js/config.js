@@ -4,6 +4,7 @@ const NeoConfig = {
     keys: {
         openai: '',
         anthropic: '',
+        elevenlabs: '',
         stripe_pk: '',
         stripe_sk: '',
         stripe_price: '',
@@ -42,6 +43,7 @@ const NeoConfig = {
         this.keys = {
             openai: '',
             anthropic: '',
+            elevenlabs: '',
             stripe_pk: '',
             stripe_sk: '',
             stripe_price: '',
@@ -100,6 +102,7 @@ function initConfigModal() {
     const fields = {
         'openai-key': 'openai',
         'anthropic-key': 'anthropic',
+        'elevenlabs-key': 'elevenlabs',
         'stripe-pk': 'stripe_pk',
         'stripe-sk': 'stripe_sk',
         'stripe-price': 'stripe_price',

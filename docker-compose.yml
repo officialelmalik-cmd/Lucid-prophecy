@@ -2,12 +2,49 @@ version: '3.8'
 
 services:
   neosai-frontend:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: neosai-apex-frontend
     ports:
-      - "3000:80"
+      - "${FRONTEND_PORT:-3000}:80"
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost/"]
       interval: 30s
       timeout: 10s
       retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.neosai.rule=Host(`${DOMAIN:-localhost}`)"
+
+  # Deno worker container (optional - for local development)
+  neosai-worker:
+    image: denoland/deno:latest
+    container_name: neosai-apex-worker
+    working_dir: /app
+    command: ["run", "--allow-net", "--allow-env", "worker.js"]
+    volumes:
+      - ./worker.js:/app/worker.js:ro
+    ports:
+      - "${WORKER_PORT:-8787}:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-}
+      - REPLICATE_API_TOKEN=${REPLICATE_API_TOKEN:-}
+      - SLACK_BOT_TOKEN=${SLACK_BOT_TOKEN:-}
+      - MAILCHIMP_API_KEY=${MAILCHIMP_API_KEY:-}
+      - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY:-}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    profiles:
+      - with-worker
+
+networks:
+  default:
+    name: neosai-network

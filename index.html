@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEOSAI APEX | Intelligent Automation Platform</title>
+    <title>NEOSAI APEX | Complete AI Automation Platform</title>
+    <meta name="description" content="NEOSAI APEX - Unified platform for AI, game creation, voice synthesis, social media, commerce, and automated communications.">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icon-192.svg">
     <meta name="theme-color" content="#7c3aed">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,95 +18,163 @@
         <div class="logo">
             <span class="logo-icon">&#9670;</span>
             <span class="logo-text">NEOSAI APEX</span>
+            <span class="version-badge">v3.0</span>
         </div>
         <nav class="main-nav">
             <a href="#dashboard" class="nav-link active">Dashboard</a>
-            <a href="#ai-studio" class="nav-link">AI Studio</a>
-            <a href="#commerce" class="nav-link">Commerce</a>
-            <a href="#media" class="nav-link">Media</a>
-            <a href="#comms" class="nav-link">Communications</a>
+            <a href="#ai" class="nav-link">AI</a>
+            <a href="#creative" class="nav-link">Creative</a>
+            <a href="#business" class="nav-link">Business</a>
+            <a href="#comms" class="nav-link">Comms</a>
         </nav>
-        <button class="config-btn" id="openConfig" title="Settings">
-            <span>&#9881;</span>
-        </button>
+        <div class="nav-actions">
+            <div class="worker-status" id="worker-status" title="Worker Status">
+                <span class="status-dot"></span>
+            </div>
+            <button class="config-btn" id="openConfig" title="Settings">
+                <span>&#9881;</span>
+            </button>
+        </div>
     </header>
 
     <main class="dashboard">
         <section class="hero">
-            <h1>Welcome to NEOSAI APEX</h1>
-            <p>Your unified platform for AI, commerce, media generation, and automated communications.</p>
+            <h1>NEOSAI APEX Platform</h1>
+            <p>Complete AI ecosystem for creation, commerce, communication, and automation — all in one dashboard.</p>
+            <div class="hero-stats">
+                <div class="hero-stat"><span class="hero-stat-n">13</span><span class="hero-stat-l">Modules</span></div>
+                <div class="hero-stat"><span class="hero-stat-n">6+</span><span class="hero-stat-l">AI Models</span></div>
+                <div class="hero-stat"><span class="hero-stat-n">∞</span><span class="hero-stat-l">Possibilities</span></div>
+            </div>
         </section>
 
+        <!-- AI Section -->
+        <div class="section-label" id="ai">
+            <span class="section-icon">🤖</span> AI Intelligence
+        </div>
         <section class="modules-grid">
             <article class="module-card" id="mod-openai">
-                <div class="module-icon">&#129302;</div>
+                <div class="module-icon">🤖</div>
                 <h3>AI Assistant</h3>
-                <p>GPT-powered text generation, analysis, and conversation.</p>
+                <p>Multi-model chat: GPT-4 Turbo, GPT-4o, Claude Sonnet, Claude Opus.</p>
                 <div class="module-status" data-api="openai">Not configured</div>
                 <button class="module-btn" data-module="openai">Launch</button>
             </article>
 
+            <article class="module-card" id="mod-voice">
+                <div class="module-icon">🎙️</div>
+                <h3>Voice Studio</h3>
+                <p>Premium TTS with ElevenLabs voices and OpenAI speech synthesis.</p>
+                <div class="module-status always-active">Active</div>
+                <button class="module-btn" data-module="voice">Launch</button>
+            </article>
+
+            <article class="module-card" id="mod-tools">
+                <div class="module-icon">🛠️</div>
+                <h3>Tools Hub</h3>
+                <p>SEO analyzer, translator, summarizer, image AI, and document generator.</p>
+                <div class="module-status always-active">Active</div>
+                <button class="module-btn" data-module="tools">Launch</button>
+            </article>
+        </section>
+
+        <!-- Creative Section -->
+        <div class="section-label" id="creative">
+            <span class="section-icon">🎨</span> Creative Suite
+        </div>
+        <section class="modules-grid">
             <article class="module-card" id="mod-replicate">
-                <div class="module-icon">&#127912;</div>
+                <div class="module-icon">🎨</div>
                 <h3>Media Studio</h3>
-                <p>Image, video, and audio generation via Replicate models.</p>
+                <p>Flux Pro, Ideogram v2, SD3, video generation, and Real-ESRGAN upscaling.</p>
                 <div class="module-status" data-api="replicate">Not configured</div>
                 <button class="module-btn" data-module="replicate">Launch</button>
             </article>
 
+            <article class="module-card" id="mod-gamestudio">
+                <div class="module-icon">🎮</div>
+                <h3>Game Studio</h3>
+                <p>Full game creation suite: concepts, assets, code generation, level design, and music.</p>
+                <div class="module-status always-active">Active</div>
+                <button class="module-btn" data-module="gamestudio">Launch</button>
+            </article>
+
+            <article class="module-card" id="mod-storage">
+                <div class="module-icon">🗂️</div>
+                <h3>Asset Storage</h3>
+                <p>Manage all generated assets, exports, and project files.</p>
+                <div class="module-status always-active">Active</div>
+                <button class="module-btn" data-module="storage">Browse</button>
+            </article>
+        </section>
+
+        <!-- Business Section -->
+        <div class="section-label" id="business">
+            <span class="section-icon">💼</span> Business Tools
+        </div>
+        <section class="modules-grid">
             <article class="module-card" id="mod-stripe">
-                <div class="module-icon">&#128179;</div>
+                <div class="module-icon">💳</div>
                 <h3>Commerce Hub</h3>
-                <p>Stripe payments, subscriptions, and checkout flows.</p>
+                <p>Stripe payments, subscriptions, payment links, and checkout flows.</p>
                 <div class="module-status" data-api="stripe">Not configured</div>
                 <button class="module-btn" data-module="stripe">Launch</button>
             </article>
 
-            <article class="module-card" id="mod-slack">
-                <div class="module-icon">&#128172;</div>
-                <h3>Slack Integration</h3>
-                <p>Automated messaging, notifications, and bot interactions.</p>
-                <div class="module-status" data-api="slack">Not configured</div>
-                <button class="module-btn" data-module="slack">Launch</button>
-            </article>
-
-            <article class="module-card" id="mod-mailchimp">
-                <div class="module-icon">&#9993;</div>
-                <h3>Email Campaigns</h3>
-                <p>Mailchimp automation for newsletters and marketing.</p>
-                <div class="module-status" data-api="mailchimp">Not configured</div>
-                <button class="module-btn" data-module="mailchimp">Launch</button>
+            <article class="module-card" id="mod-social">
+                <div class="module-icon">📱</div>
+                <h3>Social Media</h3>
+                <p>Multi-platform content generation, calendars, hashtags, and post analytics.</p>
+                <div class="module-status always-active">Active</div>
+                <button class="module-btn" data-module="social">Launch</button>
             </article>
 
             <article class="module-card" id="mod-analytics">
-                <div class="module-icon">&#128200;</div>
+                <div class="module-icon">📊</div>
                 <h3>Analytics</h3>
-                <p>Usage metrics, API health, and performance insights.</p>
+                <p>Real-time usage metrics, API health monitoring, and activity tracking.</p>
                 <div class="module-status always-active">Active</div>
                 <button class="module-btn" data-module="analytics">View</button>
             </article>
 
             <article class="module-card" id="mod-workflows">
-                <div class="module-icon">&#9881;</div>
+                <div class="module-icon">⚙️</div>
                 <h3>Workflows</h3>
-                <p>Chain modules together for automated pipelines.</p>
+                <p>Build and execute automated multi-step AI pipelines.</p>
                 <div class="module-status always-active">Active</div>
                 <button class="module-btn" data-module="workflows">Build</button>
             </article>
+        </section>
 
-            <article class="module-card" id="mod-storage">
-                <div class="module-icon">&#128451;</div>
-                <h3>Storage</h3>
-                <p>Manage generated assets, exports, and backups.</p>
-                <div class="module-status always-active">Active</div>
-                <button class="module-btn" data-module="storage">Browse</button>
+        <!-- Communications Section -->
+        <div class="section-label" id="comms">
+            <span class="section-icon">💬</span> Communications
+        </div>
+        <section class="modules-grid">
+            <article class="module-card" id="mod-slack">
+                <div class="module-icon">💬</div>
+                <h3>Slack Integration</h3>
+                <p>Bot history (Stilla), automated messaging, channels, and search.</p>
+                <div class="module-status" data-api="slack">Not configured</div>
+                <button class="module-btn" data-module="slack">Launch</button>
+            </article>
+
+            <article class="module-card" id="mod-mailchimp">
+                <div class="module-icon">✉️</div>
+                <h3>Email Campaigns</h3>
+                <p>Mailchimp automation for newsletters, campaigns, and subscriber management.</p>
+                <div class="module-status" data-api="mailchimp">Not configured</div>
+                <button class="module-btn" data-module="mailchimp">Launch</button>
             </article>
         </section>
 
         <section class="workspace" id="workspace">
             <div class="workspace-header">
                 <h2 id="workspace-title">Select a Module</h2>
-                <button class="workspace-close" id="closeWorkspace">&times;</button>
+                <div class="workspace-header-actions">
+                    <span class="workspace-module-badge" id="workspace-badge"></span>
+                    <button class="workspace-close" id="closeWorkspace">&times;</button>
+                </div>
             </div>
             <div class="workspace-content" id="workspace-content">
                 <p class="workspace-placeholder">Click a module above to begin.</p>
@@ -117,67 +186,70 @@
     <div class="modal-overlay" id="configModal">
         <div class="modal">
             <div class="modal-header">
-                <h2>API Configuration</h2>
+                <h2>⚙️ API Configuration</h2>
                 <button class="modal-close" id="closeConfig">&times;</button>
             </div>
             <div class="modal-body">
-                <p class="modal-desc">Enter your API keys below. Keys are stored locally in your browser and never sent to our servers.</p>
+                <p class="modal-desc">Keys are stored locally in your browser and never sent to our servers.</p>
 
+                <div class="config-section-label">AI Models</div>
                 <div class="config-group">
                     <label for="openai-key">OpenAI API Key</label>
                     <input type="password" id="openai-key" placeholder="sk-..." autocomplete="off">
-                    <span class="config-hint">Get key at platform.openai.com</span>
+                    <span class="config-hint">platform.openai.com/api-keys</span>
                 </div>
-
                 <div class="config-group">
                     <label for="anthropic-key">Anthropic API Key (Claude)</label>
                     <input type="password" id="anthropic-key" placeholder="sk-ant-..." autocomplete="off">
-                    <span class="config-hint">Get key at console.anthropic.com</span>
+                    <span class="config-hint">console.anthropic.com</span>
                 </div>
 
+                <div class="config-section-label">Media & Voice</div>
+                <div class="config-group">
+                    <label for="replicate-key">Replicate API Token</label>
+                    <input type="password" id="replicate-key" placeholder="r8_..." autocomplete="off">
+                    <span class="config-hint">replicate.com/account</span>
+                </div>
+                <div class="config-group">
+                    <label for="elevenlabs-key">ElevenLabs API Key</label>
+                    <input type="password" id="elevenlabs-key" placeholder="xi_..." autocomplete="off">
+                    <span class="config-hint">elevenlabs.io — for premium TTS</span>
+                </div>
+
+                <div class="config-section-label">Commerce</div>
                 <div class="config-group">
                     <label for="stripe-pk">Stripe Publishable Key</label>
                     <input type="password" id="stripe-pk" placeholder="pk_live_..." autocomplete="off">
                 </div>
-
                 <div class="config-group">
                     <label for="stripe-sk">Stripe Secret Key</label>
                     <input type="password" id="stripe-sk" placeholder="sk_live_..." autocomplete="off">
-                    <span class="config-hint">Used by backend worker only</span>
+                    <span class="config-hint">Backend worker only</span>
                 </div>
-
                 <div class="config-group">
                     <label for="stripe-price">Stripe Price ID</label>
                     <input type="text" id="stripe-price" placeholder="price_..." autocomplete="off">
-                    <span class="config-hint">Your subscription product price ID</span>
                 </div>
 
-                <div class="config-group">
-                    <label for="replicate-key">Replicate API Token</label>
-                    <input type="password" id="replicate-key" placeholder="r8_..." autocomplete="off">
-                    <span class="config-hint">Get token at replicate.com/account</span>
-                </div>
-
+                <div class="config-section-label">Communications</div>
                 <div class="config-group">
                     <label for="slack-token">Slack Bot Token</label>
                     <input type="password" id="slack-token" placeholder="xoxb-..." autocomplete="off">
                 </div>
-
                 <div class="config-group">
                     <label for="slack-channel">Slack Default Channel</label>
                     <input type="text" id="slack-channel" placeholder="C0XXXXXXXX" autocomplete="off">
                 </div>
-
                 <div class="config-group">
                     <label for="mailchimp-key">Mailchimp API Key</label>
                     <input type="password" id="mailchimp-key" placeholder="xxxxxxxx-us1" autocomplete="off">
                 </div>
-
                 <div class="config-group">
                     <label for="mailchimp-list">Mailchimp List ID</label>
                     <input type="text" id="mailchimp-list" placeholder="abc123def4" autocomplete="off">
                 </div>
 
+                <div class="config-section-label">Backend</div>
                 <div class="config-group">
                     <label for="worker-url">Backend Worker URL</label>
                     <input type="url" id="worker-url" placeholder="https://your-worker.workers.dev" autocomplete="off">
@@ -192,7 +264,7 @@
     </div>
 
     <footer class="main-footer">
-        <p>&copy; 2026 NEOSAI APEX | <a href="https://www.sai8.com">sai8.com</a></p>
+        <p>NEOSAI APEX v3.0 &copy; 2026 | <a href="https://www.sai8.com">sai8.com</a></p>
     </footer>
 
     <script src="js/config.js"></script>
@@ -204,12 +276,14 @@
     <script src="js/modules/analytics.js"></script>
     <script src="js/modules/workflows.js"></script>
     <script src="js/modules/storage.js"></script>
+    <script src="js/modules/gamestudio.js"></script>
+    <script src="js/modules/voice.js"></script>
+    <script src="js/modules/socialmedia.js"></script>
+    <script src="js/modules/tools.js"></script>
     <script src="js/app.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').catch(err => {
-                console.warn('SW registration failed:', err);
-            });
+            navigator.serviceWorker.register('/sw.js').catch(() => {});
         }
     </script>
 </body>
