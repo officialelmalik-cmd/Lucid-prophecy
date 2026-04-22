@@ -2,23 +2,13 @@ name = "8plasmacell8"
 main = "worker.js"
 compatibility_date = "2024-01-01"
 
-[vars]
-ENVIRONMENT = "production"
+account_id = "YOUR_ACCOUNT_ID"
+workers_dev = true
+compatibility_date = "2026-04-22"
 
-# Uncomment and add your KV namespace if using storage
-# [[kv_namespaces]]
-# binding = "NEOSAI_KV"
-# id = "your-kv-namespace-id"
+[[binds]]
+type = "service"
+name = "YOUR_SERVICE_NAME"
 
-# Environment variables (set via dashboard or wrangler secret put)
-# OPENAI_API_KEY
-# STRIPE_SECRET_KEY
-# REPLICATE_API_TOKEN
-# SLACK_BOT_TOKEN
-# MAILCHIMP_API_KEY
-
-[env.staging]
-name = "neosai-apex-worker-staging"
-
-[env.staging.vars]
-ENVIRONMENT = "staging"
+[[triggers]]
+crons = ["* * * * *"]

@@ -57,6 +57,12 @@ async function handleRequest(request, env) {
             case 'slack_post':
                 return await handleSlackPost(data, env);
 
+            case 'slack_history':
+                return await handleSlackHistory(data, env);
+
+            case 'slack_bot_info':
+                return await handleSlackBotInfo(data, env);
+
             case 'mailchimp_subscribe':
                 return await handleMailchimpSubscribe(data, env);
 
@@ -400,6 +406,75 @@ async function handleSlackPost(data, env) {
     }
 
     return jsonResponse({ success: true, ts: result.ts });
+}
+
+async function handleSlackHistory(data, env) {
+    const token = data.token || env.SLACK_BOT_TOKEN;
+    if (!token) {
+        return jsonResponse({ error: 'Slack bot token not configured' }, 400);
+    }
+
+    const params = new URLSearchParams({
+        channel: data.channel,
+        limit: data.limit || '50'
+    });
+
+    if (data.oldest) params.append('oldest', data.oldest);
+    if (data.latest) params.append('latest', data.latest);
+
+    const response = await fetch(`https://slack.com/api/conversations.history?${params}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    const result = await response.json();
+
+    if (!result.ok) {
+        return jsonResponse({ error: result.error || 'Failed to fetch history' }, 400);
+    }
+
+    return jsonResponse({
+        messages: result.messages || [],
+        has_more: result.has_more || false,
+        response_metadata: result.response_metadata
+    });
+}
+
+async function handleSlackBotInfo(data, env) {
+    const token = data.token || env.SLACK_BOT_TOKEN;
+    if (!token) {
+        return jsonResponse({ error: 'Slack bot token not configured' }, 400);
+    }
+
+    const authResponse = await fetch('https://slack.com/api/auth.test', {
+        headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const authInfo = await authResponse.json();
+
+    if (!authInfo.ok) {
+        return jsonResponse({ error: authInfo.error || 'Auth failed' }, 400);
+    }
+
+    const userResponse = await fetch(`https://slack.com/api/users.info?user=${authInfo.user_id}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const userInfo = await userResponse.json();
+
+    const conversationsResponse = await fetch('https://slack.com/api/conversations.list?types=public_channel,private_channel,im,mpim&limit=100', {
+        headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const conversations = await conversationsResponse.json();
+
+    return jsonResponse({
+        bot_id: authInfo.bot_id,
+        user_id: authInfo.user_id,
+        team_id: authInfo.team_id,
+        team: authInfo.team,
+        user: authInfo.user,
+        user_details: userInfo.user || null,
+        channels: conversations.channels || []
+    });
 }
 
 async function handleMailchimpSubscribe(data, env) {

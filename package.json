@@ -1,4 +1,14 @@
 {
+  "name": "lucid-prophecy",
+  "version": "1.0.0",
+  "description": "A lucid prophecy package",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 'Error: no test specified' && exit 1"
+  },
+  "author": "officialelmalik-cmd",
+  "license": "ISC"
+}
   "name": "neosai-apex",
   "version": "2.0.0",
   "description": "NEOSAI APEX - Unified AI, Commerce, Media & Communications Platform",
@@ -7,8 +17,10 @@
     "dev": "npx serve -l 3000",
     "deploy:cf": "npx wrangler deploy",
     "deploy:cf-dev": "npx wrangler dev",
+    "deploy:worker": "echo 'Deploy worker.js to Cloudflare Workers or Deno Deploy'",
     "lint": "npx eslint js/**/*.js",
-    "test": "echo \"Tests configured\" && exit 0"
+    "test": "echo \"Tests configured\" && exit 0",
+    "build": "echo 'Static site - no build required'"
   },
   "repository": {
     "type": "git",
@@ -16,15 +28,17 @@
   },
   "keywords": [
     "ai",
-    "automation",
-    "slack",
-    "stripe",
     "openai",
+    "stripe",
     "replicate",
-    "mailchimp"
+    "slack",
+    "mailchimp",
+    "automation",
+    "media-generation"
   ],
   "author": "NEOSAI",
   "license": "MIT",
+  "homepage": "https://www.sai8.com",
   "devDependencies": {
     "wrangler": "^3.0.0"
   },
@@ -32,3 +46,4 @@
     "node": ">=18.0.0"
   }
 }
+{\n  "name": "NEOSAI APEX Project",\n  "version": "1.0.0",\n  "description": "A comprehensive project for APEX framework development and integration.",\n  "main": "index.js",\n  "scripts": {\n    "test": "echo 'Error: no test specified' && exit 1"\n  },\n  "repository": {\n    "type": "git",\n    "url": "https://github.com/officialelmalik-cmd/Lucid-prophecy.git"\n  },\n  "keywords": [\n    "NEOSAI",\n    "APEX",\n    "framework"\n  ],\n  "author": "Your Name",\n  "license": "ISC"\n}
