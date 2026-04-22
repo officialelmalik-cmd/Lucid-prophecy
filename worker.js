@@ -78,6 +78,18 @@ async function handleRequest(request, env) {
             case 'workflow_execute':
                 return await handleWorkflow(data, env);
 
+            case 'slack_history':
+                return await handleSlackHistory(data, env);
+
+            case 'slack_bot_info':
+                return await handleSlackBotInfo(data, env);
+
+            case 'slack_channels':
+                return await handleSlackChannels(data, env);
+
+            case 'slack_search':
+                return await handleSlackSearch(data, env);
+
             default:
                 return jsonResponse({ error: 'Unknown action' }, 400);
         }
@@ -98,10 +110,18 @@ function jsonResponse(data, status = 200) {
 }
 
 async function handleOpenAI(data, env) {
+    const provider = data.provider || 'openai';
+
+    if (provider === 'anthropic') {
+        return await handleAnthropic(data, env);
+    }
+
     const apiKey = data.apiKey || env.OPENAI_API_KEY;
     if (!apiKey) {
         return jsonResponse({ error: 'OpenAI API key not configured' }, 400);
     }
+
+    const model = data.model || 'gpt-4-turbo-preview';
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
@@ -110,9 +130,10 @@ async function handleOpenAI(data, env) {
             'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
-            model: data.model || 'gpt-4o',
+            model,
             messages: data.messages,
-            max_tokens: data.max_tokens || 1000
+            max_tokens: data.max_tokens || 4096,
+            temperature: data.temperature || 0.7
         })
     });
 
@@ -122,7 +143,49 @@ async function handleOpenAI(data, env) {
     }
 
     const result = await response.json();
-    return jsonResponse({ content: result.choices[0].message.content });
+    return jsonResponse({
+        content: result.choices[0].message.content,
+        model: result.model,
+        usage: result.usage
+    });
+}
+
+async function handleAnthropic(data, env) {
+    const apiKey = data.anthropicKey || env.ANTHROPIC_API_KEY;
+    if (!apiKey) {
+        return jsonResponse({ error: 'Anthropic API key not configured' }, 400);
+    }
+
+    const model = data.model || 'claude-sonnet-4-6-20250514';
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify({
+            model,
+            max_tokens: data.max_tokens || 4096,
+            messages: data.messages.map(m => ({
+                role: m.role === 'system' ? 'user' : m.role,
+                content: m.content
+            }))
+        })
+    });
+
+    if (!response.ok) {
+        const error = await response.text();
+        return jsonResponse({ error: 'Anthropic request failed: ' + error }, response.status);
+    }
+
+    const result = await response.json();
+    return jsonResponse({
+        content: result.content[0].text,
+        model: result.model,
+        usage: result.usage
+    });
 }
 
 async function handleStripeCheckout(data, env) {
@@ -226,46 +289,90 @@ async function handleStripePaymentLink(data, env) {
     return jsonResponse({ url: link.url });
 }
 
+const PREMIUM_MODELS = {
+    'flux-pro': 'black-forest-labs/flux-1.1-pro',
+    'flux-schnell': 'black-forest-labs/flux-schnell',
+    'sdxl': 'stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b',
+    'sd3': 'stability-ai/stable-diffusion-3',
+    'ideogram': 'ideogram-ai/ideogram-v2-turbo',
+    'recraft': 'recraft-ai/recraft-v3-svg',
+    'musicgen': 'meta/musicgen:671ac645ce5e552cc63a54a2bbff63fcf798043055d2dac5fc9e36a837eedcfb',
+    'video': 'minimax/video-01',
+    'upscale': 'nightmareai/real-esrgan:f121d640bd286e1fdc67f9799164c1d5be36ff74576ee11c803ae5b665dd46aa'
+};
+
 async function handleReplicate(data, env) {
     const apiToken = data.apiToken || env.REPLICATE_API_TOKEN;
     if (!apiToken) {
         return jsonResponse({ error: 'Replicate API token not configured' }, 400);
     }
 
-    const modelParts = data.model.split(':');
-    const version = modelParts.length > 1 ? modelParts[1] : data.model;
+    let model = data.model;
+    if (PREMIUM_MODELS[model]) {
+        model = PREMIUM_MODELS[model];
+    }
 
-    const response = await fetch('https://api.replicate.com/v1/predictions', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${apiToken}`
-        },
-        body: JSON.stringify({
-            version,
-            input: { prompt: data.prompt }
-        })
-    });
+    const modelParts = model.split(':');
+    const isVersioned = modelParts.length > 1;
+
+    const input = {
+        prompt: data.prompt,
+        ...(data.negative_prompt && { negative_prompt: data.negative_prompt }),
+        ...(data.width && { width: data.width }),
+        ...(data.height && { height: data.height }),
+        ...(data.num_outputs && { num_outputs: data.num_outputs }),
+        ...(data.guidance_scale && { guidance_scale: data.guidance_scale }),
+        ...(data.num_inference_steps && { num_inference_steps: data.num_inference_steps })
+    };
+
+    let response;
+    if (isVersioned) {
+        response = await fetch('https://api.replicate.com/v1/predictions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiToken}`
+            },
+            body: JSON.stringify({
+                version: modelParts[1],
+                input
+            })
+        });
+    } else {
+        response = await fetch(`https://api.replicate.com/v1/models/${model}/predictions`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiToken}`,
+                'Prefer': 'wait'
+            },
+            body: JSON.stringify({ input })
+        });
+    }
 
     if (!response.ok) {
         const error = await response.text();
         return jsonResponse({ error: 'Replicate request failed: ' + error }, response.status);
     }
 
-    const prediction = await response.json();
+    let prediction = await response.json();
 
-    for (let i = 0; i < 60; i++) {
-        await new Promise(r => setTimeout(r, 2000));
+    if (prediction.status === 'succeeded') {
+        return jsonResponse({ output: prediction.output, model: model });
+    }
 
-        const pollResponse = await fetch(`https://api.replicate.com/v1/predictions/${prediction.id}`, {
-            headers: { 'Authorization': `Token ${apiToken}` }
+    for (let i = 0; i < 120; i++) {
+        await new Promise(r => setTimeout(r, 1500));
+
+        const pollResponse = await fetch(prediction.urls?.get || `https://api.replicate.com/v1/predictions/${prediction.id}`, {
+            headers: { 'Authorization': `Bearer ${apiToken}` }
         });
 
         const status = await pollResponse.json();
 
         if (status.status === 'succeeded') {
-            return jsonResponse({ output: status.output });
-        } else if (status.status === 'failed') {
+            return jsonResponse({ output: status.output, model: model });
+        } else if (status.status === 'failed' || status.status === 'canceled') {
             return jsonResponse({ error: status.error || 'Generation failed' }, 500);
         }
     }
@@ -478,6 +585,123 @@ async function handleAnalytics(env) {
         media_generated: Math.floor(Math.random() * 500),
         revenue: Math.random() * 10000,
         emails_sent: Math.floor(Math.random() * 2000)
+    });
+}
+
+async function handleSlackHistory(data, env) {
+    const token = data.token || env.SLACK_BOT_TOKEN;
+    if (!token) {
+        return jsonResponse({ error: 'Slack bot token not configured' }, 400);
+    }
+
+    const params = new URLSearchParams({
+        channel: data.channel,
+        limit: data.limit || '50'
+    });
+
+    if (data.cursor) {
+        params.append('cursor', data.cursor);
+    }
+
+    const response = await fetch(`https://slack.com/api/conversations.history?${params}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    const result = await response.json();
+
+    if (!result.ok) {
+        return jsonResponse({ error: result.error || 'Failed to fetch history' }, 400);
+    }
+
+    return jsonResponse({
+        messages: result.messages || [],
+        has_more: result.has_more || false,
+        next_cursor: result.response_metadata?.next_cursor || null
+    });
+}
+
+async function handleSlackBotInfo(data, env) {
+    const token = data.token || env.SLACK_BOT_TOKEN;
+    if (!token) {
+        return jsonResponse({ error: 'Slack bot token not configured' }, 400);
+    }
+
+    const authResponse = await fetch('https://slack.com/api/auth.test', {
+        headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    const authResult = await authResponse.json();
+
+    if (!authResult.ok) {
+        return jsonResponse({ error: authResult.error || 'Auth failed' }, 400);
+    }
+
+    return jsonResponse({
+        bot_id: authResult.bot_id,
+        user_id: authResult.user_id,
+        team: authResult.team,
+        team_id: authResult.team_id,
+        url: authResult.url
+    });
+}
+
+async function handleSlackChannels(data, env) {
+    const token = data.token || env.SLACK_BOT_TOKEN;
+    if (!token) {
+        return jsonResponse({ error: 'Slack bot token not configured' }, 400);
+    }
+
+    const params = new URLSearchParams({
+        types: 'public_channel,private_channel,im,mpim',
+        limit: '200'
+    });
+
+    const response = await fetch(`https://slack.com/api/conversations.list?${params}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    const result = await response.json();
+
+    if (!result.ok) {
+        return jsonResponse({ error: result.error || 'Failed to fetch channels' }, 400);
+    }
+
+    const channels = (result.channels || []).map(ch => ({
+        id: ch.id,
+        name: ch.name || ch.user || 'Direct Message',
+        is_channel: ch.is_channel,
+        is_private: ch.is_private,
+        is_im: ch.is_im,
+        is_mpim: ch.is_mpim
+    }));
+
+    return jsonResponse({ channels });
+}
+
+async function handleSlackSearch(data, env) {
+    const token = data.token || env.SLACK_BOT_TOKEN;
+    if (!token) {
+        return jsonResponse({ error: 'Slack bot token not configured' }, 400);
+    }
+
+    const params = new URLSearchParams({
+        query: data.query,
+        count: data.count || '20'
+    });
+
+    const response = await fetch(`https://slack.com/api/search.messages?${params}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    const result = await response.json();
+
+    if (!result.ok) {
+        return jsonResponse({ error: result.error || 'Search failed' }, 400);
+    }
+
+    return jsonResponse({
+        messages: result.messages?.matches || [],
+        total: result.messages?.total || 0
     });
 }
 

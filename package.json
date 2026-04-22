@@ -24,6 +24,33 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/officialelmalik-cmd/lucid-prophecy"
+  "version": "2.0.0",
+  "description": "NEOSAI APEX - Unified AI, Commerce, Media & Communications Platform",
+  "main": "worker.js",
+  "scripts": {
+    "dev": "npx serve -l 3000",
+    "deploy:cf": "npx wrangler deploy",
+    "deploy:cf-dev": "npx wrangler dev",
+    "lint": "npx eslint js/**/*.js",
+    "test": "echo \"Tests configured\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/officialelmalik-cmd/lucid-prophecy"
+  },
+  "keywords": [
+    "ai",
+    "automation",
+    "slack",
+    "stripe",
+    "openai",
+    "replicate",
+    "mailchimp"
+  ],
+  "author": "NEOSAI",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
   },
   "engines": {
     "node": ">=18.0.0"

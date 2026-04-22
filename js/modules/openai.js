@@ -1,5 +1,6 @@
 const NeoOpenAI = {
     messages: [],
+    selectedModel: 'gpt-4-turbo-preview',
 
     render(container) {
         if (!NeoConfig.isConfigured('openai')) {
@@ -15,13 +16,35 @@ const NeoOpenAI = {
         }
 
         container.innerHTML = `
-            <div class="chat-container">
-                <div class="chat-messages" id="ai-messages"></div>
-                <div class="chat-input-row">
-                    <input type="text" class="chat-input" id="ai-input" placeholder="Ask anything...">
-                    <button class="chat-send" id="ai-send">Send</button>
+            <div class="ai-panel">
+                <div class="ai-controls">
+                    <select class="media-select" id="ai-model-select">
+                        <optgroup label="OpenAI">
+                            <option value="gpt-4-turbo-preview">GPT-4 Turbo</option>
+                            <option value="gpt-4o">GPT-4o</option>
+                            <option value="gpt-4o-mini">GPT-4o Mini</option>
+                        </optgroup>
+                        <optgroup label="Anthropic">
+                            <option value="claude-sonnet-4-6-20250514">Claude Sonnet 4.6</option>
+                            <option value="claude-3-5-sonnet-20241022">Claude 3.5 Sonnet</option>
+                            <option value="claude-3-opus-20240229">Claude 3 Opus</option>
+                        </optgroup>
+                    </select>
+                    <button class="btn btn-secondary" id="ai-clear">Clear Chat</button>
+                </div>
+                <div class="chat-container">
+                    <div class="chat-messages" id="ai-messages"></div>
+                    <div class="chat-input-row">
+                        <input type="text" class="chat-input" id="ai-input" placeholder="Ask anything...">
+                        <button class="chat-send" id="ai-send">Send</button>
+                    </div>
                 </div>
             </div>
+            <style>
+                .ai-panel { display: flex; flex-direction: column; gap: 1rem; }
+                .ai-controls { display: flex; gap: 1rem; align-items: center; }
+                .ai-controls .media-select { flex: 1; }
+            </style>
         `;
 
         this.bindEvents();
@@ -31,10 +54,21 @@ const NeoOpenAI = {
     bindEvents() {
         const input = document.getElementById('ai-input');
         const sendBtn = document.getElementById('ai-send');
+        const modelSelect = document.getElementById('ai-model-select');
+        const clearBtn = document.getElementById('ai-clear');
 
         sendBtn.addEventListener('click', () => this.sendMessage());
         input.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') this.sendMessage();
+        });
+
+        modelSelect.addEventListener('change', (e) => {
+            this.selectedModel = e.target.value;
+        });
+
+        clearBtn.addEventListener('click', () => {
+            this.messages = [];
+            this.renderMessages();
         });
     },
 
@@ -67,12 +101,21 @@ const NeoOpenAI = {
     },
 
     async callAPI(message) {
+        const isClaude = this.selectedModel.startsWith('claude');
+
         if (NeoConfig.hasWorker()) {
             const result = await NeoApp.callWorker('openai_chat', {
                 messages: this.messages,
-                apiKey: NeoConfig.get('openai')
+                model: this.selectedModel,
+                provider: isClaude ? 'anthropic' : 'openai',
+                apiKey: NeoConfig.get('openai'),
+                anthropicKey: NeoConfig.get('anthropic')
             });
             return result.content;
+        }
+
+        if (isClaude) {
+            throw new Error('Claude requires Worker backend. Please configure Worker URL.');
         }
 
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -82,12 +125,12 @@ const NeoOpenAI = {
                 'Authorization': `Bearer ${NeoConfig.get('openai')}`
             },
             body: JSON.stringify({
-                model: 'gpt-4o',
+                model: this.selectedModel,
                 messages: this.messages.map(m => ({
                     role: m.role,
                     content: m.content
                 })),
-                max_tokens: 1000
+                max_tokens: 4096
             })
         });
 
