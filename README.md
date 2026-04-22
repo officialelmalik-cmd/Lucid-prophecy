@@ -8,12 +8,23 @@ Enterprise-grade unified platform for AI, Commerce, Media Generation, and Automa
 - **AI Assistant** - Multi-model support (GPT-4 Turbo, Claude 3, Llama 3)
 - **Media Studio** - Premium image/video generation (SDXL, Flux Pro, Midjourney-style)
 - **Commerce Hub** - Stripe payments, subscriptions, checkout flows
+- **Slack Integration** - Automated messaging, notifications, and bot conversation history
 - **Slack Integration** - Bot history, messaging, search, channels
 - **Email Campaigns** - Mailchimp automation for newsletters
 - **Analytics** - Real-time metrics and API health monitoring
 - **Workflows** - Chain modules together for automation pipelines
 - **Storage** - Asset management and exports
 
+### Slack Bot History
+
+The Slack module includes full conversation history retrieval:
+- View bot information and connection status
+- Browse all accessible channels (public, private, DMs)
+- Load and view message history with timestamps
+- Export conversation history to JSON
+- Identify bot vs user messages
+
+## Quick Start
 ### v2.0 Upgrades
 - **PWA Support** - Installable app with offline capabilities
 - **Slack Bot History** - Full conversation retrieval and export (Stilla)
