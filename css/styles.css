@@ -497,6 +497,101 @@ body {
     text-decoration: none;
 }
 
+/* Version Badge */
+.version-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    background: var(--accent);
+    color: white;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+    align-self: center;
+}
+
+/* Nav Actions */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* Worker Status Dot */
+.worker-status {
+    display: flex;
+    align-items: center;
+    cursor: default;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+/* Section Labels */
+.section-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.section-icon { font-size: 1.1rem; }
+
+/* Hero Stats */
+.hero-stats {
+    display: flex;
+    gap: 2.5rem;
+    justify-content: center;
+    margin-top: 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    animation: fadeIn 0.8s ease 0.4s backwards;
+}
+
+.hero-stat { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
+.hero-stat-n { font-size: 1.75rem; font-weight: 700; color: var(--accent-light); }
+.hero-stat-l { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
+
+/* Workspace header actions */
+.workspace-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.workspace-module-badge {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    background: var(--bg-primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+}
+
+/* Config section labels */
+.config-section-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent-light);
+    font-weight: 700;
+    margin: 1.25rem 0 0.75rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--border);
+}
+
 /* Module Workspace Components */
 .chat-container {
     display: flex;

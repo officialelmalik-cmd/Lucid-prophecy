@@ -1,4 +1,4 @@
-const CACHE_NAME = 'neosai-apex-v2';
+const CACHE_NAME = 'neosai-apex-v3';
 const STATIC_ASSETS = [
     '/',
     '/index.html',
@@ -13,6 +13,10 @@ const STATIC_ASSETS = [
     '/js/modules/analytics.js',
     '/js/modules/workflows.js',
     '/js/modules/storage.js',
+    '/js/modules/gamestudio.js',
+    '/js/modules/voice.js',
+    '/js/modules/socialmedia.js',
+    '/js/modules/tools.js',
     '/manifest.json'
 ];
 
