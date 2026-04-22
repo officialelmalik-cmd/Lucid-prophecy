@@ -1,153 +1,90 @@
-# NEOSAI APEX Platform v2.0
+# NEOSAI APEX Platform v3.0
 
-Enterprise-grade unified platform for AI, Commerce, Media Generation, and Automated Communications.
+Complete AI ecosystem for game creation, voice synthesis, social media, commerce, and automation.
 
-## Features
+## Live Platform
 
-### Core Modules
-- **AI Assistant** - Multi-model support (GPT-4 Turbo, Claude 3, Llama 3)
-- **Media Studio** - Premium image/video generation (SDXL, Flux Pro, Midjourney-style)
-- **Commerce Hub** - Stripe payments, subscriptions, checkout flows
-- **Slack Integration** - Automated messaging, notifications, and bot conversation history
-- **Slack Integration** - Bot history, messaging, search, channels
-- **Email Campaigns** - Mailchimp automation for newsletters
-- **Analytics** - Real-time metrics and API health monitoring
-- **Workflows** - Chain modules together for automation pipelines
-- **Storage** - Asset management and exports
+| Link | Description |
+|------|-------------|
+| **https://www.sai8.com** | Production Frontend (GitHub Pages) |
+| **Worker URL** | Set in Settings modal after deploying |
 
-### Slack Bot History
+## 14 Modules
 
-The Slack module includes full conversation history retrieval:
-- View bot information and connection status
-- Browse all accessible channels (public, private, DMs)
-- Load and view message history with timestamps
-- Export conversation history to JSON
-- Identify bot vs user messages
+### AI Intelligence
+- **AI Assistant** - GPT-4 Turbo, GPT-4o, Claude Sonnet 4.6, Claude 3 Opus
+- **Voice Studio** - ElevenLabs (9 voices) + OpenAI TTS (6 voices)
+- **Tools Hub** - SEO analyzer, translator, summarizer, image AI, doc generator
 
-## Quick Start
-### v2.0 Upgrades
-- **PWA Support** - Installable app with offline capabilities
-- **Slack Bot History** - Full conversation retrieval and export (Stilla)
-- **CI/CD Pipeline** - Automated GitHub Actions deployment
-- **Docker Support** - Containerized deployment
-- **Premium UI** - Glass morphism, animations, dark theme
+### Creative Suite
+- **Media Studio** - Flux Pro, Ideogram v2, SD3, video generation, upscaling
+- **Game Studio** - Full game creation: concepts, assets, code, music, levels
+- **Asset Storage** - Manage generated assets and exports
 
-## Quick Start
+### Business Tools
+- **Commerce Hub** - Stripe payments, subscriptions, payment links
+- **Social Media** - Multi-platform content, calendars, hashtags, analytics
+- **Analytics** - Real-time usage tracking and API health
+- **Workflows** - Multi-step AI automation pipelines
 
-### Option 1: GitHub Pages (Frontend)
+### Communications
+- **Slack / Stilla** - Bot history, messaging, channels, search, export
+- **Email Campaigns** - Mailchimp automation and subscriber management
+
+## Quick Deploy
+
+### Frontend (GitHub Pages)
+Already configured - enable Pages in repo Settings > Pages > main branch.
+
+### Backend (Cloudflare Workers)
 ```bash
-# Already configured via CNAME (www.sai8.com)
-# Enable Pages in repo Settings > Pages
-```
-
-### Option 2: Docker
-```bash
-docker-compose up -d
-# Access at http://localhost:3000
-```
-
-### Option 3: Netlify
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start)
-
-### Option 4: Vercel
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
-
-## Backend Deployment
-
-### Cloudflare Workers
-```bash
-# Install wrangler
 npm install -g wrangler
-
-# Login and deploy
 wrangler login
 wrangler deploy
 
 # Set secrets
 wrangler secret put OPENAI_API_KEY
-wrangler secret put STRIPE_SECRET_KEY
-wrangler secret put SLACK_BOT_TOKEN
+wrangler secret put ANTHROPIC_API_KEY
 wrangler secret put REPLICATE_API_TOKEN
+wrangler secret put SLACK_BOT_TOKEN
+wrangler secret put ELEVENLABS_API_KEY
+wrangler secret put STRIPE_SECRET_KEY
 wrangler secret put MAILCHIMP_API_KEY
 ```
 
-### Deno Deploy
-1. Go to [dash.deno.com](https://dash.deno.com)
-2. Create new project
-3. Link to this repo or paste `worker.js`
-4. Set environment variables
-5. Deploy
-
-## CI/CD (GitHub Actions)
-
-Add these secrets to your repository:
-- `CF_API_TOKEN` - Cloudflare API token
-- `CF_ACCOUNT_ID` - Cloudflare account ID
-- `OPENAI_API_KEY`
-- `STRIPE_SECRET_KEY`
-- `REPLICATE_API_TOKEN`
-- `SLACK_BOT_TOKEN`
-- `MAILCHIMP_API_KEY`
-
-Push to `main` to auto-deploy.
+### Docker
+```bash
+docker-compose up -d                              # Frontend only
+docker-compose --profile with-worker up -d        # Frontend + Deno worker
+```
 
 ## Environment Variables
 
-| Variable | Description |
-|----------|-------------|
-| `OPENAI_API_KEY` | OpenAI API key (GPT-4) |
-| `STRIPE_SECRET_KEY` | Stripe secret key |
-| `REPLICATE_API_TOKEN` | Replicate API token |
-| `SLACK_BOT_TOKEN` | Slack bot token (xoxb-) |
-| `MAILCHIMP_API_KEY` | Mailchimp API key |
-
-## API Keys Setup
-
-| Service | Get Key |
-|---------|---------|
-| OpenAI | [platform.openai.com](https://platform.openai.com/api-keys) |
-| Stripe | [dashboard.stripe.com/apikeys](https://dashboard.stripe.com/apikeys) |
-| Replicate | [replicate.com/account](https://replicate.com/account) |
-| Slack | [api.slack.com/apps](https://api.slack.com/apps) |
-| Mailchimp | [mailchimp.com/developer](https://mailchimp.com/developer/) |
+| Variable | Service |
+|----------|---------|
+| `OPENAI_API_KEY` | OpenAI GPT-4 |
+| `ANTHROPIC_API_KEY` | Claude AI |
+| `REPLICATE_API_TOKEN` | Media generation |
+| `ELEVENLABS_API_KEY` | Voice synthesis |
+| `SLACK_BOT_TOKEN` | Slack bot |
+| `STRIPE_SECRET_KEY` | Payments |
+| `MAILCHIMP_API_KEY` | Email campaigns |
 
 ## File Structure
 
 ```
-/
-├── index.html          # Main dashboard
-├── css/styles.css      # Premium styling
+├── index.html              # Main dashboard
+├── css/styles.css          # Premium UI
 ├── js/
-│   ├── config.js       # Configuration management
-│   ├── app.js          # Main application
-│   └── modules/        # 8 feature modules
-├── worker.js           # Backend (Cloudflare/Deno)
-├── sw.js               # Service worker (PWA)
-├── manifest.json       # PWA manifest
-├── wrangler.toml       # Cloudflare config
-├── netlify.toml        # Netlify config
-├── vercel.json         # Vercel config
-├── Dockerfile          # Docker build
-├── docker-compose.yml  # Docker compose
-├── nginx.conf          # Nginx config
-└── .github/workflows/  # CI/CD
+│   ├── app.js              # Main app
+│   ├── config.js           # API key management
+│   └── modules/            # 14 feature modules
+├── worker.js               # Backend (Cloudflare/Deno)
+├── wrangler.toml           # Cloudflare config
+├── docker-compose.yml      # Docker config
+├── .github/workflows/      # CI/CD
+└── manifest.json           # PWA config
 ```
-
-## Slack Bot History (Stilla)
-
-The platform includes full Slack conversation history retrieval:
-- View messages from any accessible channel
-- Bot/user message differentiation
-- Timestamp display
-- Load more pagination
-- Export to JSON
-
-## PWA Features
-
-- Installable on desktop and mobile
-- Offline-capable with service worker
-- Fast load times with caching
-- Native-like experience
 
 ## License
 

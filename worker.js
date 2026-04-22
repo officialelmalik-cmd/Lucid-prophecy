@@ -91,12 +91,6 @@ async function handleRequest(request, env) {
             case 'workflow_execute':
                 return await handleWorkflow(data, env);
 
-            case 'slack_history':
-                return await handleSlackHistory(data, env);
-
-            case 'slack_bot_info':
-                return await handleSlackBotInfo(data, env);
-
             case 'slack_channels':
                 return await handleSlackChannels(data, env);
 

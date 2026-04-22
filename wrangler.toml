@@ -1,14 +1,17 @@
-name = "8plasmacell8"
+name = "neosai-apex-worker"
 main = "worker.js"
 compatibility_date = "2024-01-01"
 
-account_id = "YOUR_ACCOUNT_ID"
 workers_dev = true
-compatibility_date = "2026-04-22"
 
-[[binds]]
-type = "service"
-name = "YOUR_SERVICE_NAME"
+[vars]
+ENVIRONMENT = "production"
 
-[[triggers]]
-crons = ["* * * * *"]
+# Secrets (set via wrangler secret put or dashboard):
+# OPENAI_API_KEY
+# ANTHROPIC_API_KEY
+# STRIPE_SECRET_KEY
+# REPLICATE_API_TOKEN
+# SLACK_BOT_TOKEN
+# MAILCHIMP_API_KEY
+# ELEVENLABS_API_KEY
