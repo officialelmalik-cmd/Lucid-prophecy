@@ -1,12 +1,20 @@
 {
   "name": "neosai-apex",
-  "version": "1.0.0",
-  "description": "Unified platform for AI, commerce, media generation, and automated communications",
+  "version": "2.0.0",
+  "description": "NEOSAI APEX - Unified AI, Commerce, Media & Communications Platform",
+  "main": "worker.js",
   "scripts": {
-    "dev": "npx serve .",
+    "dev": "npx serve -l 3000",
+    "deploy:cf": "npx wrangler deploy",
+    "deploy:cf-dev": "npx wrangler dev",
     "deploy:worker": "echo 'Deploy worker.js to Cloudflare Workers or Deno Deploy'",
-    "lint": "echo 'No linting configured'",
+    "lint": "npx eslint js/**/*.js",
+    "test": "echo \"Tests configured\" && exit 0",
     "build": "echo 'Static site - no build required'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/officialelmalik-cmd/lucid-prophecy"
   },
   "keywords": [
     "ai",
@@ -21,34 +29,6 @@
   "author": "NEOSAI",
   "license": "MIT",
   "homepage": "https://www.sai8.com",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/officialelmalik-cmd/lucid-prophecy"
-  "version": "2.0.0",
-  "description": "NEOSAI APEX - Unified AI, Commerce, Media & Communications Platform",
-  "main": "worker.js",
-  "scripts": {
-    "dev": "npx serve -l 3000",
-    "deploy:cf": "npx wrangler deploy",
-    "deploy:cf-dev": "npx wrangler dev",
-    "lint": "npx eslint js/**/*.js",
-    "test": "echo \"Tests configured\" && exit 0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/officialelmalik-cmd/lucid-prophecy"
-  },
-  "keywords": [
-    "ai",
-    "automation",
-    "slack",
-    "stripe",
-    "openai",
-    "replicate",
-    "mailchimp"
-  ],
-  "author": "NEOSAI",
-  "license": "MIT",
   "devDependencies": {
     "wrangler": "^3.0.0"
   },
