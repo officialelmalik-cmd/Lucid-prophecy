@@ -1,21 +1,18 @@
-name: NEOSAI APEX Sovereign Build
+name: NEOSAI APEX Absolute Build
 on: [push, workflow_dispatch]
 permissions:
   contents: write
   pages: write
   id-token: write
 jobs:
-  build_and_deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v4
