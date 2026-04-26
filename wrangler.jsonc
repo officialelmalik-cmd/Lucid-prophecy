@@ -1,14 +1,29 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "8plasmacell8",
+  "name": "neosai-apex",
   "compatibility_date": "2026-04-26",
+  "main": "src/index.ts",
   "observability": {
     "enabled": true
   },
   "assets": {
-    "directory": "neosai_apex"
+    "directory": "neosai_apex",
+    "binding": "ASSETS"
   },
   "compatibility_flags": [
     "nodejs_compat"
+  ],
+  "r2_buckets": [
+    {
+      "binding": "VAULT",
+      "bucket_name": "neosai-vault"
+    },
+    {
+      "binding": "MATRIX_DATA",
+      "bucket_name": "neosai-matrix-data"
+    }
+  ],
+  "routes": [
+    { "pattern": "sai8.com/*", "zone_name": "sai8.com" }
   ]
 }
